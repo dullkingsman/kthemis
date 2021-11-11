@@ -98,7 +98,19 @@ class ThemisExample {
 				)
 			}
 
-
+			link("tied") {
+				description("Link description")
+				operationRef("Operation reference")
+				operationId("Operation Id")
+				requestBody("Some value")
+				parameters(
+					"someParam" - "some value",
+					"someOtherParam" - "some other value"
+				)
+				server {
+					url("https://remotehost:32439")
+				}
+			}
 		}
 	}
 }

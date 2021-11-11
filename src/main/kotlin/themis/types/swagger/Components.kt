@@ -40,10 +40,10 @@ data class Components(
 //	 * An object to hold reusable [SecurityScheme] objects.
 //	 */
 //	val securitySchemes: MutableMap<String, SecuritySchemeObject>? = null,
-//	/**
-//	 * An object to hold reusable [Link] objects.
-//	 */
-//	val links: MutableMap<String, LinkObject>? = null,
+	/**
+	 * An object to hold reusable [Link] objects.
+	 */
+	var links: MutableMap<String, Link>? = null,
 //	/**
 //	 * An object to hold reusable [Callback] objects.
 //	 */

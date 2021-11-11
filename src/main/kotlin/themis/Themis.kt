@@ -93,7 +93,18 @@ fun Array(block: () -> Schema): Schema {
 /**
  * Constructs a [MutableMap] of the provided parameter list.
  */
+@JvmName("mapStringSchema")
 fun map(vararg pairs: Pair<String, Schema>): MutableMap<String, Schema> {
+    return pairs.associate { (key, value) ->
+        key to value
+    }.toMutableMap()
+}
+
+/**
+ * Constructs a [MutableMap] of the provided parameter list.
+ */
+@JvmName("mapStringString")
+fun map(vararg pairs: Pair<String, String>): MutableMap<String, String> {
     return pairs.associate { (key, value) ->
         key to value
     }.toMutableMap()
@@ -105,6 +116,15 @@ fun map(vararg pairs: Pair<String, Schema>): MutableMap<String, Schema> {
  * **Runs in the context of a [String] object.**
  */
 operator fun String.minus(type: Schema): Pair<String, Schema> {
+    return this to type
+}
+
+/**
+ * Pairs a [String] instance with another [String] instance.
+ *
+ * **Runs in the context of a [String] object.**
+ */
+operator fun String.minus(type: String): Pair<String, String> {
     return this to type
 }
 
@@ -447,5 +467,85 @@ infix fun Example.value(value: String): Example {
  */
 infix fun Example.externalValue(externalValue: String): Example {
     this.externalValue = externalValue
+    return this
+}
+
+/**
+ * Adds a [Pair] of [String] and [Link] object to the **links**
+ * [Map] with in the *components* element of an [Openapi] object.
+ *
+ * **Runs in the context of an [Openapi] object.**
+ *
+ * @param [key] The name of the key.
+ * @param [block] A function that constructs a [Link] object.
+ */
+fun Openapi.link (key: String, block: Link.() -> Link): Openapi {
+    initiateComponents()
+
+    if(this.components?.links === null)
+        this.components?.links = mutableMapOf()
+
+    this.components?.links?.put(key, block(Link()))
+    return this
+}
+
+/**
+ * Sets the the *description* field of a [Link] object.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+infix fun Link.description(description: String): Link {
+    this.description = description
+    return this
+}
+
+/**
+ * Sets the the *operationRef* field of a [Link] object.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+infix fun Link.operationRef(operationRef: String): Link {
+    this.operationRef = operationRef
+    return this
+}
+
+/**
+ * Sets the the *operationId* field of a [Link] object.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+infix fun Link.operationId(operationId: String): Link {
+    this.operationId = operationId
+    return this
+}
+
+/**
+ * Sets the the *requestBody* field of a [Link] object.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+infix fun Link.requestBody(requestBody: String): Link {
+    this.requestBody = requestBody
+    return this
+}
+
+/**
+ * Sets the the *parameters* field of a [Link] object with a map of
+ * the arguments provided.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+fun Link.parameters(vararg parameters: Pair<String, String>): Link {
+    this.parameters = map(*parameters)
+    return this
+}
+
+/**
+ * Sets the the *server* field of a [Link] object.
+ *
+ * **Runs in the context of a [Link] object.**
+ */
+fun Link.server (block: Server.() -> Server): Link {
+    this.server = block(Server(""))
     return this
 }
