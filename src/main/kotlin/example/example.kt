@@ -33,6 +33,11 @@ class ThemisExample {
 				}
 			}
 
+			externalDocs {
+				description("Just an example.")
+				url("https://remotehost:45544")
+			}
+
 			tag {
 				name("Profile")
 				description("Profile control section.")
@@ -92,6 +97,8 @@ class ThemisExample {
 				"""
 				)
 			}
+
+
 		}
 	}
 }

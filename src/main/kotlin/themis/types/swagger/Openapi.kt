@@ -57,5 +57,5 @@ data class Openapi(
     /**
      * Additional external documentation.
      */
-    val externalDocs: ExternalDocumentation? = null,
+    var externalDocs: ExternalDocumentation? = null,
 ) { val o = this }

@@ -5,8 +5,8 @@ import java.util.*
 import kotlin.reflect.KClass
 
 val todos: List<Nothing> = listOf(
-    TODO("define all remaining spec definitions"),
-    TODO("define all remaining DSL functions")
+//    TODO("define all remaining spec definitions"),
+//    TODO("define all remaining DSL functions")
 )
 
 /**
@@ -119,7 +119,7 @@ operator fun String.minus(type: Schema): Pair<String, Schema> {
  *
  * **Runs in the context of a [String] object.**
  */
-infix fun String.api(block: Openapi.() -> Unit): Openapi {
+infix fun String.api(block: Openapi.() -> Openapi): Openapi {
     SpecList.specs[this] = Openapi(
         openapi = "3.0.0",
         info = Info(
@@ -128,9 +128,7 @@ infix fun String.api(block: Openapi.() -> Unit): Openapi {
         )
     )
 
-    block(SpecList.specs[this] as Openapi)
-
-    return SpecList.specs[this] as Openapi
+    return block(SpecList.specs[this] as Openapi)
 }
 
 /**
@@ -139,6 +137,14 @@ infix fun String.api(block: Openapi.() -> Unit): Openapi {
 fun Openapi.initiateTags () {
     if (this.tags === null)
         this.tags = mutableListOf()
+}
+
+/**
+ * Initiates the the *externalDocs* element of an [Openapi] object if it is **null**.
+ */
+fun Openapi.initiateExternalDocs () {
+    if (this.externalDocs === null)
+        this.externalDocs = ExternalDocumentation(url = "")
 }
 
 /**
@@ -155,8 +161,9 @@ fun Openapi.initiateComponents () {
  *
  * **Runs in the context of an [Openapi] object.**
  */
-infix fun Openapi.openapi (openapiVersion: String) {
+infix fun Openapi.openapi (openapiVersion: String): Openapi {
     this.openapi = openapiVersion
+    return this
 }
 
 /**
@@ -165,8 +172,9 @@ infix fun Openapi.openapi (openapiVersion: String) {
  *
  * **Runs in the context of an [Openapi] object.**
  */
-infix fun Openapi.title (title: String) {
+infix fun Openapi.title (title: String): Openapi {
     this.info.title = title
+    return this
 }
 
 /**
@@ -175,8 +183,9 @@ infix fun Openapi.title (title: String) {
  *
  * **Runs in the context of an [Openapi] object.**
  */
-infix fun Openapi.description (description: String) {
+infix fun Openapi.description (description: String): Openapi {
     this.info.description = description
+    return this
 }
 
 /**
@@ -189,8 +198,9 @@ infix fun Openapi.description (description: String) {
  * not be confused with the version string provided for the url
  * when initializing an [Openapi] object.
  */
-infix fun Openapi.version (version: String) {
+infix fun Openapi.version (version: String): Openapi {
     this.info.version = version
+    return this
 }
 
 /**
@@ -200,10 +210,9 @@ infix fun Openapi.version (version: String) {
  *
  * @param [block] A function that constructs a [Server] object.
  */
-infix fun Openapi.server (block: Server.() -> Unit) {
-    val s = Server("")
-    s.block()
-    this.servers.add(s)
+infix fun Openapi.server (block: Server.() -> Server): Openapi {
+    this.servers.add(block(Server("")))
+    return this
 }
 
 /**
@@ -211,8 +220,9 @@ infix fun Openapi.server (block: Server.() -> Unit) {
  *
  * **Runs in the context of a [Server] object.**
  */
-infix fun Server.url(url: String) {
+infix fun Server.url(url: String): Server {
     this.url = url
+    return this
 }
 
 /**
@@ -220,8 +230,9 @@ infix fun Server.url(url: String) {
  *
  * **Runs in the context of a [Server] object.**
  */
-infix fun Server.description(description: String) {
+infix fun Server.description(description: String): Server {
     this.description = description
+    return this
 }
 
 /**
@@ -233,14 +244,13 @@ infix fun Server.description(description: String) {
  * @param [variableName] The name of the server variable.
  * @param [block] A function that constructs a [ServerVariable] object.
  */
-fun Server.variable(variableName: String, block: ServerVariable.() -> Unit) {
+fun Server.variable(variableName: String, block: ServerVariable.() -> ServerVariable): Server {
     if (this.variables === null){
         this.variables = mutableMapOf()
     }
 
-    val sv = ServerVariable(default = "")
-    block(sv)
-    this.variables?.set(variableName, sv)
+    this.variables?.set(variableName, block(ServerVariable(default = "")))
+    return this
 }
 
 /**
@@ -249,16 +259,18 @@ fun Server.variable(variableName: String, block: ServerVariable.() -> Unit) {
  *
  * **Runs in the context of a [ServerVariable] object.**
  */
-infix fun <E: Enum<E>>ServerVariable.enum(enum: KClass<E>) {
+infix fun <E: Enum<E>>ServerVariable.enum(enum: KClass<E>): ServerVariable {
     this.enum = _enum(enum)
+    return this
 }
 /**
  * Sets the the *default* field of a [ServerVariable] object.
  *
  * **Runs in the context of a [ServerVariable] object.**
  */
-infix fun ServerVariable.default(default: String) {
+infix fun ServerVariable.default(default: String): ServerVariable {
     this.default = default
+    return this
 }
 
 /**
@@ -266,8 +278,9 @@ infix fun ServerVariable.default(default: String) {
  *
  * **Runs in the context of a [ServerVariable] object.**
  */
-infix fun ServerVariable.description(description: String) {
+infix fun ServerVariable.description(description: String): ServerVariable {
     this.description = description
+    return this
 }
 
 /**
@@ -277,12 +290,10 @@ infix fun ServerVariable.description(description: String) {
  *
  * @param [block] A function that constructs a [Tag] object.
  */
-infix fun Openapi.tag (block: Tag.() -> Unit) {
+infix fun Openapi.tag (block: Tag.() -> Tag): Openapi {
     initiateTags()
-
-    val t = Tag("")
-    t.block()
-    this.tags?.add(t)
+    this.tags?.add(block(Tag("")))
+    return this
 }
 
 /**
@@ -290,8 +301,9 @@ infix fun Openapi.tag (block: Tag.() -> Unit) {
  *
  * **Runs in the context of a [Tag] object.**
  */
-infix fun Tag.name(name: String){
+infix fun Tag.name(name: String): Tag {
     this.name = name
+    return this
 }
 
 /**
@@ -299,8 +311,9 @@ infix fun Tag.name(name: String){
  *
  * **Runs in the context of a [Tag] object.**
  */
-infix fun Tag.description(description: String){
+infix fun Tag.description(description: String): Tag{
     this.description = description
+    return this
 }
 
 /**
@@ -308,10 +321,22 @@ infix fun Tag.description(description: String){
  *
  * **Runs in the context of a [Tag] object.**
  */
-infix fun Tag.externalDocs (externalDocsBlock: ExternalDocumentation.() -> Unit) {
-    val ed = ExternalDocumentation("", "")
-    ed.externalDocsBlock()
-    this.externalDocs = ed
+infix fun Tag.externalDocs (externalDocsBlock: ExternalDocumentation.() -> ExternalDocumentation): Tag {
+    this.externalDocs = externalDocsBlock(ExternalDocumentation("", ""))
+    return this
+}
+
+/**
+ * Sets the *externalDocs* field of an [Openapi] object.
+ *
+ * **Runs in the context of an [Openapi] object.**
+ *
+ * @param [block] A function that constructs an [ExternalDocumentation] object.
+ */
+infix fun Openapi.externalDocs (block: ExternalDocumentation.() -> ExternalDocumentation): Openapi {
+    initiateExternalDocs()
+    this.externalDocs = block(ExternalDocumentation(url = ""))
+    return this
 }
 
 /**
@@ -319,8 +344,9 @@ infix fun Tag.externalDocs (externalDocsBlock: ExternalDocumentation.() -> Unit)
  *
  * **Runs in the context of an [ExternalDocumentation] object.**
  */
-infix fun ExternalDocumentation.description(description: String){
+infix fun ExternalDocumentation.description(description: String): ExternalDocumentation {
     this.description = description
+    return this
 }
 
 /**
@@ -328,8 +354,9 @@ infix fun ExternalDocumentation.description(description: String){
  *
  * **Runs in the context of an [ExternalDocumentation] object.**
  */
-infix fun ExternalDocumentation.url(url: String){
+infix fun ExternalDocumentation.url(url: String): ExternalDocumentation{
     this.url = url
+    return this
 }
 
 /**
@@ -341,13 +368,14 @@ infix fun ExternalDocumentation.url(url: String){
  * @param [key] The name of the key.
  * @param [block] A function that constructs a [Schema] object.
  */
-fun Openapi.schema (key: String, block: Schema.() -> Schema) {
+fun Openapi.schema (key: String, block: Schema.() -> Schema): Openapi {
     initiateComponents()
 
     if(this.components?.schemas === null)
         this.components?.schemas = mutableMapOf()
 
     this.components?.schemas?.put(key, block(Schema(type = themis.types.swagger.String)))
+    return this
 }
 
 /**
@@ -372,15 +400,14 @@ fun Schema.of(block: (Schema) -> Schema): Schema {
  * @param [key] The name of the key.
  * @param [block] A function that constructs an [Example] object.
  */
-fun Openapi.example (key: String, block: Example.() -> Unit) {
+fun Openapi.example (key: String, block: Example.() -> Example): Openapi {
     initiateComponents()
 
     if(this.components?.examples === null)
         this.components?.examples = mutableMapOf()
 
-    val e = Example()
-    e.block()
-    this.components?.examples?.put(key, e)
+    this.components?.examples?.put(key, block(Example()))
+    return this
 }
 
 /**
@@ -388,8 +415,9 @@ fun Openapi.example (key: String, block: Example.() -> Unit) {
  *
  * **Runs in the context of an [Example] object.**
  */
-infix fun Example.summary(summary: String) {
+infix fun Example.summary(summary: String): Example {
     this.summary = summary
+    return this
 }
 
 /**
@@ -397,8 +425,9 @@ infix fun Example.summary(summary: String) {
  *
  * **Runs in the context of an [Example] object.**
  */
-infix fun Example.description(description: String) {
+infix fun Example.description(description: String): Example {
     this.description = description
+    return this
 }
 
 /**
@@ -406,8 +435,9 @@ infix fun Example.description(description: String) {
  *
  * **Runs in the context of an [Example] object.**
  */
-infix fun Example.value(value: String) {
+infix fun Example.value(value: String): Example {
     this.value = value.trimIndent().trim()
+    return this
 }
 
 /**
@@ -415,6 +445,7 @@ infix fun Example.value(value: String) {
  *
  * **Runs in the context of an [Example] object.**
  */
-infix fun Example.externalValue(externalValue: String) {
+infix fun Example.externalValue(externalValue: String): Example {
     this.externalValue = externalValue
+    return this
 }
