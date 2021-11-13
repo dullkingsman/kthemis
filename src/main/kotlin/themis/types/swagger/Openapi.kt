@@ -26,25 +26,25 @@ data class Openapi(
      * provided, or is an empty array, the default value would be a
      * [Server] object with a url value of `/`
      */
-    val servers: MutableList<Server> = mutableListOf<Server>(),
-//    /**
-//     * The available paths and operations for the API.
-//     */
-//    val paths: PathsObject,
+    var servers: MutableList<Server>? = null,
+    /**
+     * The available paths and operations for the API.
+     */
+    val paths: MutableMap<String, PathsItem> = mutableMapOf(),
     /**
      * An element to hold various schemas for the specification.
      */
     var components: Components? = null,
-//    /**
-//     * A declaration of which security mechanisms can be used across
-//     * the API. The list of values includes alternative [SecurityRequirement]
-//     * objects that can be used. Only one of the [SecurityRequirement]
-//     * objects need to be satisfied to authorize a request.
-//     * Individual operations can override this definition. To make
-//     * security optional, an empty security requirement (`{}`) can be
-//     * included in the array.
-//     */
-//    val security: MutableList<SecurityRequirementObject>? = mutableListOf<SecurityRequirementObject>(),
+    /**
+     * A declaration of which security mechanisms can be used across
+     * the API. The list of values includes alternative [String]
+     * objects that can be used. Only one of the [String]
+     * objects need to be satisfied to authorize a request.
+     * Individual operations can override this definition. To make
+     * security optional, an empty [SecurityRequirement] object can be
+     * included in the array.
+     */
+    var security: MutableList<SecurityRequirement>? = null,
     /**
      * A list of tags used by the specification with additional
      * metadata. The order of the tags can be used to reflect on their

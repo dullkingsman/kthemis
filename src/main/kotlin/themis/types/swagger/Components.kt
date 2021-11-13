@@ -16,36 +16,36 @@ data class Components(
 	 * An object to hold reusable [Schema] objects.
 	 */
 	var schemas: MutableMap<String, Schema>? = null,
-//	/**
-//	 * An object to hold reusable [Response] objects.
-//	 */
-//	val responses: MutableMap<String, ResponseObject>? = null,
-//	/**
-//	 * An object to hold reusable [Parameter] objects.
-//	 */
-//	val parameters: MutableMap<String, ParameterObject>? = null,
+	/**
+	 * An object to hold reusable [Response] objects.
+	 */
+	var responses: MutableMap<String, Response>? = null,
+	/**
+	 * An object to hold reusable [Parameter] objects.
+	 */
+	var parameters: MutableMap<String, Parameter>? = null,
 	/**
 	 * An object to hold reusable [Example] objects.
 	 */
 	var examples: MutableMap<String, Example>? = null,
-//	/**
-//	 * An object to hold reusable [RequestBody] objects.
-//	 */
-//	val requestBodies: MutableMap<String, RequestBodyObject>? = null,
-//	/**
-//	 * An object to hold reusable [Header] objects.
-//	 */
-//	val headers: MutableMap<String, HeaderObject>? = null,
-//	/**
-//	 * An object to hold reusable [SecurityScheme] objects.
-//	 */
-//	val securitySchemes: MutableMap<String, SecuritySchemeObject>? = null,
+	/**
+	 * An object to hold reusable [RequestBody] objects.
+	 */
+	var requestBodies: MutableMap<String, RequestBody>? = null,
+	/**
+	 * An object to hold reusable [Header] objects.
+	 */
+	var headers: MutableMap<String, Header>? = null,
+	/**
+	 * An object to hold reusable [SecurityScheme] objects.
+	 */
+	var securitySchemes: MutableMap<String, SecurityScheme>? = null,
 	/**
 	 * An object to hold reusable [Link] objects.
 	 */
 	var links: MutableMap<String, Link>? = null,
-//	/**
-//	 * An object to hold reusable [Callback] objects.
-//	 */
-//	val callbacks: MutableMap<String, CallbackObject>? = null
+	/**
+	 * An object to hold reusable <[String],[PathsItem]> pairs.
+	 */
+	var callbacks: MutableMap<String, Callback>? = null
 ) { val o = this }

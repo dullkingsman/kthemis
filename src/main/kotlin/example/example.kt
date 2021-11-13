@@ -1,11 +1,12 @@
 package example
 
 import themis.*
+import themis.types.swagger.Operation
 
 class ThemisExample {
 	enum class Port {
-		E3000,
-		E443
+		`E3000`,
+		`E443`
 	}
 
 	fun describe (version: String?) {
@@ -111,6 +112,14 @@ class ThemisExample {
 					url("https://remotehost:32439")
 				}
 			}
+
+//			securityRequirement(
+//				"bearerAuth" - arrayOf("")
+//			)
+//
+//			get("/_test") {
+//				tags(arrayOf("User"))
+//			}
 		}
 	}
 }
