@@ -5,8 +5,8 @@ import java.util.*
 import kotlin.reflect.KClass
 
 val todos: List<Nothing> = listOf(
-//    TODO("define all remaining spec definitions"),
-//    TODO("define all remaining DSL functions")
+    TODO("define all remaining spec definitions"),
+    TODO("define all remaining DSL functions")
 )
 
 /**
@@ -26,14 +26,6 @@ class SpecList {
  */
 fun KClass<out Enum<*>>.enumConstantNames() =
         this.java.enumConstants.map(Enum<*>::name)
-
-/**
- * Gives the name of each element in an enum class without the first character
- * as a list.
- */
-fun <E: Enum<E>> _enum(enum: KClass<E>): MutableList<String> {
-    return enum.enumConstantNames().map{v -> v.removeRange(0, 1)}.toMutableList()
-}
 
 /**
  * Returns the non null value between value it is called on or
@@ -327,13 +319,12 @@ fun Server.variable(variableName: String, block: ServerVariable.() -> ServerVari
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * Sets the the *enum* field of a [ServerVariable] object. It uses
- * [_enum] to convert the enums to a [List] of [String].
+ * Sets the the *enum* field of a [ServerVariable] object.
  *
  * **Runs in the context of a [ServerVariable] object.**
  */
 infix fun <E: Enum<E>>ServerVariable.enum(enum: KClass<E>): ServerVariable {
-    this.enum = _enum(enum)
+    this.enum = enum.enumConstantNames().toMutableList()
     return this
 }
 /**
@@ -1833,7 +1824,7 @@ fun Operation.server(block: Server.() -> Server): Operation {
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
-/************************************************************** MediType *******************************************************************/
+/************************************************************** MediaType ******************************************************************/
 /*-----------------------------------------------------------------------------------------------------------------------------------------*/
 
 /**

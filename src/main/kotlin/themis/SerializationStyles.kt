@@ -1,4 +1,4 @@
-package themis.types.swagger
+package themis
 
 const val MATRIX: String = "matrix"
 const val LABEL: String = "label"

@@ -1,4 +1,4 @@
-package themis.types.swagger
+package themis
 
 const val QUERY:  String = "query"
 const val HEADER: String = "header"

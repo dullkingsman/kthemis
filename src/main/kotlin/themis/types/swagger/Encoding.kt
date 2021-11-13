@@ -1,4 +1,5 @@
 package themis.types.swagger
+
 /**
  * A single encoding definition applied to a single schema
  * property.

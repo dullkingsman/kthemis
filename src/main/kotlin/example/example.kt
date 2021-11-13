@@ -5,8 +5,8 @@ import themis.types.swagger.Operation
 
 class ThemisExample {
 	enum class Port {
-		`E3000`,
-		`E443`
+		`3000`,
+		`443`
 	}
 
 	fun describe (version: String?) {
@@ -113,13 +113,17 @@ class ThemisExample {
 				}
 			}
 
-//			securityRequirement(
-//				"bearerAuth" - arrayOf("")
-//			)
-//
-//			get("/_test") {
-//				tags(arrayOf("User"))
-//			}
+			get("/_test") {
+				respondWith("200") {
+					jsonContent {
+						schema {
+							Object(
+								"data" - STRING
+							)
+						}
+					}
+				}
+			}
 		}
 	}
 }
